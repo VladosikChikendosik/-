@@ -1,0 +1,110 @@
+#1
+class Point:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __str__(self):
+        return f"Point({self.x}, {self.y}, {self.z})"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __iter__(self):
+        return iter((self.x, self.y, self.z))
+
+# Пример использования
+point = Point(1, 2, 3)
+x, y, z = point
+
+print(x, y, z)
+
+# Итерирование по координатам
+#for coord in p:
+    #print(coord)  # Вывод: 1, затем 2, затем 3
+
+#2
+class DevelopmentTeam:
+    def __init__(self):
+        self.juniors = []
+        self.seniors = []
+
+    def add_junior(self, *junior_names):
+        for name in junior_names:
+            self.juniors.append((name, 'junior'))
+
+    def add_senior(self, *senior_names):
+        for name in senior_names:
+            self.seniors.append((name, 'senior'))
+
+    def __iter__(self):
+        # Сначала возвращаем всех junior, затем всех senior
+        return iter(self.juniors + self.seniors)
+
+# Пример использования
+if __name__ == "__main__":
+
+#3
+class AttrsIterator:
+    def __init__(self, obj):
+        self.obj = obj
+        self.attributes = list(obj.__dict__.items())  # Получаем атрибуты в виде списка кортежей
+        self.index = 0  # Индекс для отслеживания текущего атрибута
+
+    def __iter__(self):
+        return self  # Возвращаем сам объект как итератор
+
+    def __next__(self):
+        if self.index < len(self.attributes):
+            attr = self.attributes[self.index]  # Получаем текущий атрибут
+            self.index += 1  # Увеличиваем индекс для следующей итерации
+            return attr  # Возвращаем атрибут
+        else:
+            raise StopIteration  # Если атрибутов больше нет, останавливаем итерацию
+
+# Пример использования
+class User:
+    def __init__(self, name, surname, age):
+        self.name = name
+        self.surname = surname
+        self.age = age
+
+
+user = User('Debbie', 'Harry', 77)
+attrsiterator = AttrsIterator(user)
+
+print(*attrsiterator)
+
+#4
+import random
+
+class RandomLooper:
+    def __init__(self, *iterables):
+        # Собираем все элементы из всех переданных итерируемых объектов в один список
+        self.elements = []
+        for iterable in iterables:
+            self.elements.extend(iterable)
+        # Перемешиваем элементы
+        random.shuffle(self.elements)
+        # Устанавливаем курсор на начало списка
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index < len(self.elements):
+            element = self.elements[self.index]
+            self.index += 1
+            return element
+        else:
+            raise StopIteration
+
+# Пример использования
+if __name__ == "__main__":
+    colors = ['red', 'blue', 'green', 'purple']
+    shapes = ['square', 'circle', 'triangle', 'octagon']
+    randomlooper = RandomLooper(colors, shapes)
+
+    print(list(randomlooper))

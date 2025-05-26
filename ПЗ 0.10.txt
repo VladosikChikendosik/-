@@ -1,0 +1,222 @@
+#1
+from abc import ABC, abstractmethod
+a = "U+5350"
+
+
+class Middle(ABC):
+    def __init__(self, user_votes, expert_votes):
+        self.user_votes = user_votes                   # пользовательские оценки
+        self.expert_votes = expert_votes               # оценки критиков
+
+    def get_correct_user_votes(self):
+        """Возвращает нормализованный список пользовательских оценок
+        без слишком низких и слишком высоких значений"""
+        return [vote for vote in self.user_votes if 10 < vote < 90]
+
+    def get_correct_expert_votes(self):
+        """Возвращает нормализованный список оценок критиков
+        без слишком низких и слишком высоких значений"""
+        return [vote for vote in self.expert_votes if 5 < vote < 95]
+
+    @abstractmethod
+    def get_average(self, users=True):
+        """Возвращает среднее арифметическое пользовательских оценок или
+        оценок критиков в зависимости от значения параметра users"""
+        if users:
+            votes = self.get_correct_user_votes()
+        else:
+            votes = self.get_correct_expert_votes()
+
+        return sum(votes) / len(votes)
+
+class Average(Middle):
+    def __init__(self, user_votes, expert_votes):
+        super().__init__(user_votes, expert_votes)
+        self.user_votes = user_votes                   # пользовательские оценки
+        self.expert_votes = expert_votes               # оценки критиков
+#2
+from abc import ABC, abstractmethod
+
+class ChessPiece(ABC):
+    def __init__(self, horizontal: str, vertical: int):
+        self.vertical = vertical
+        self.horizontal = horizontal
+
+    @abstractmethod
+    def can_move(self, horizontal, vertical):
+        pass
+
+class King(ChessPiece):
+    def can_move(self, horizontal: str, vertical: int) -> bool:
+        current_x = ord(self.horizontal) - ord('a') + 1
+        current_y = self.vertical
+        target_x = ord(horizontal.lower()) - ord('a') + 1
+        target_y = vertical
+
+        dx = abs(target_x - current_x)
+        dy = abs(target_y - current_y)
+
+        return (dx == 1 and dy == 0) or (dx == 0 and dy == 1) or (dx == 1 and dy == 1)
+
+class Knight(ChessPiece):
+    def can_move(self, horizontal: str, vertical: int) -> bool:
+        current_x = ord(self.horizontal) - ord('a') + 1
+        current_y = self.vertical
+        target_x = ord(horizontal.lower()) - ord('a') + 1
+        target_y = vertical
+
+        dx = abs(target_x - current_x)
+        dy = abs(target_y - current_y)
+
+        return (dx == 2 and dy == 1) or (dx == 1 and dy == 2)
+
+    king = King('b', 2)
+
+    print(king.can_move('c', 3))
+    print(king.can_move('a', 1))
+    print(king.can_move('f', 7))
+
+    # TEST_2:
+knight = Knight('c', 3)
+
+print(knight.can_move('e', 5))
+print(knight.can_move('e', 4))
+
+    # TEST_3:
+king = King('e', 3)
+
+print(king.can_move('e', 3))
+print(king.can_move('e', 4))
+print(king.can_move('b', 1))
+
+    # TEST_4:
+knight = Knight('h', 8)
+
+print(knight.can_move('h', 8))
+print(knight.can_move('a', 6))
+print(knight.can_move('a', 1))
+print(knight.can_move('g', 6))
+
+    # TEST_5:
+knight = Knight('a', 1)
+
+for horizontal in 'abcdefg':
+    for vertical in range(1, 9):
+        print(f'{horizontal}{vertical}', knight.can_move(horizontal, vertical))
+
+    # TEST_6:
+king = King('a', 1)
+
+for horizontal in 'abcdefg':
+    for vertical in range(1, 9):
+        print(f'{horizontal}{vertical}', king.can_move(horizontal, vertical))
+
+    # TEST_7:
+kings = [King(h, v) for h in 'abcdefgh' for v in range(1, 9)]
+
+for king in kings:
+    print('*' * 20)
+    for horizontal in 'abcdefgh':
+        for vertical in range(1, 9):
+            if king.can_move(horizontal, vertical):
+                print(f'King({king.horizontal}{king.vertical})', f'{horizontal}{vertical}',
+                        king.can_move(horizontal, vertical))
+
+    # TEST_8:
+knights = [Knight(h, v) for h in 'abcdefgh' for v in range(1, 9)]
+
+for knight in knights:
+    print('*' * 20)
+    for horizontal in 'abcdefgh':
+        for vertical in range(1, 9):
+            if knight.can_move(horizontal, vertical):
+                print(f'Knight({knight.horizontal}{knight.vertical})', f'{horizontal}{vertical}',
+                        knight.can_move(horizontal, vertical))
+#3
+from abc import ABC, abstractmethod
+class Validator(ABC):
+    def __set_name__(self, owner, name):
+        self.private_name = f'_{name}'
+
+    def __get__(self, obj, objtype=None):
+        if not hasattr(obj, self.private_name):
+            raise AttributeError("Атрибут не найден")
+        return getattr(obj, self.private_name)
+
+    def __set__(self, obj, value):
+        self.validate(value)
+        setattr(obj, self.private_name, value)
+
+    @abstractmethod
+    def validate(self):
+        pass
+
+class Number(Validator):
+    def __init__(self, minvalue = None, maxvalue = None):
+        self.minvalue = minvalue
+        self.maxvalue = maxvalue
+
+    def validate(self, obj):
+        if not isinstance(obj, int or float):
+            raise TypeError("Устанавливаемое значение должно быть числом")
+
+        if obj < self.minvalue:
+            raise ValueError(f"Устанавливаемое число должно быть больше или равно {self.minvalue}")
+
+        if obj > self.maxvalue:
+            raise ValueError(f"Устанавливаемое число должно быть меньше или равно {self.maxvalue}")
+
+class String(Validator):
+    def __init__(self, minsize = None, maxsize = None, predicate = None):
+        self.minsize = minsize
+        self. maxsize = maxsize
+        self.predicate = predicate
+
+    def validate(self, obj):
+        if not isinstance(obj, str):
+            raise TypeError("Устанавливаемое значение должно быть строкой")
+
+        if obj < self.minsize:
+            raise ValueError(f"Длина устанавливаемой строки должна быть больше или равна {self.minsize}")
+
+        if obj > self.maxsize:
+            raise ValueError(f"Длина устанавливаемой строки должна быть меньше или равна {self.maxsize}")
+
+        if self.predicate == False:
+            raise ValueError("Устанавливаемая строка не удовлетворяет дополнительным условиям")
+
+
+class Student:
+    age = Number(18, 99)
+
+
+student = Student()
+student.age = 19
+print(student.age)
+
+class Student:
+    age = Number(18, 99)
+
+try:
+    student = Student()
+    student.age = '19'
+except TypeError as error:
+    print(error)
+
+class Student:
+    age = Number(18, 99)
+
+try:
+    student = Student()
+    student.age = 16
+except ValueError as error:
+    print(error)
+
+class Student:
+    age = Number(18, 99)
+
+try:
+    student = Student()
+    student.age = 101
+except ValueError as error:
+    print(error)

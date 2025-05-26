@@ -1,0 +1,30 @@
+#1
+def print_file_content(filename):
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            print(file.read())
+    except FileNotFoundError:
+        print("Файл не найден")
+#2
+def non_closed_files(files):
+    return [f for f in files if not f.closed]
+#3
+def log_for(logfile, date_str):
+    output_filename = f"log_for_{date_str}.txt"
+    with open(logfile, 'r', encoding='utf-8') as infile, \
+         open(output_filename, 'w', encoding='utf-8') as outfile:
+        for line in infile:
+            # Каждая строка имеет формат: "YYYY-MM-DD <TYPE>: <Описание>"
+            # Разделим строку по пробелу, чтобы получить дату
+            parts = line.strip().split(' ', 1)
+            if len(parts) >= 2:
+                date_part = parts[0]
+                if date_part == date_str:
+                    # Оставляем только часть после даты
+                    # Остальная часть строки: "<TYPE>: <Описание>"
+                    # Можно записывать напрямую
+                    # Если нужно убрать дату, то просто записываем всю строку без даты
+                    # В условии указано, что события без даты, значит, убираем дату
+                    # Тогда из строки извлекаем всё после первого пробела
+                    event = parts[1]
+                    outfile.write(event + '\n')

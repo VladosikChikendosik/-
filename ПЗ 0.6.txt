@@ -1,0 +1,134 @@
+#1
+class Vehicle:
+    pass
+
+class LandVehicle(Vehicle):
+    pass
+
+class WaterVehicle(Vehicle):
+    pass
+
+class AirVehicle(Vehicle):
+    pass
+
+class Car(LandVehicle):
+    pass
+
+class Motorcycle(LandVehicle):
+    pass
+
+class Bicycle(LandVehicle):
+    pass
+
+#2
+# Определение базового класса
+class Shape:
+    pass
+
+# Круг — это фигура, наследующаяся от Shape
+class Circle(Shape):
+    pass
+
+# Многоугольник — это фигура, наследующаяся от Shape
+class Polygon(Shape):
+    pass
+
+# Треугольник — это многоугольник
+class Triangle(Polygon):
+    pass
+
+# Четырехугольник — это многоугольник (можно добавить при необходимости)
+class Quadrilateral(Polygon):
+    pass
+
+# Конкретные виды треугольников
+class IsoscelesTriangle(Triangle):
+    pass
+
+class EquilateralTriangle(Triangle):
+    pass
+
+#3
+# Определяем базовый класс Animal
+class Animal:
+    def sleep(self):
+        pass
+
+    def eat(self):
+        pass
+
+# Класс Fish наследует Animal
+class Fish(Animal):
+    def swim(self):
+        pass
+
+# Класс Bird наследует Animal
+class Bird(Animal):
+    def lay_eggs(self):
+        pass
+
+# Класс FlyingBird наследует Bird
+class FlyingBird(Bird):
+    def fly(self):
+        pass
+#4
+class User:
+    def __init__(self, name):
+        self.name = name
+
+    def skip_ads(self):
+        return False
+
+
+class PremiumUser(User):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def skip_ads(self):
+        return True
+
+#5
+class Validator:
+    def __init__(self, obj):
+        self.obj = obj
+
+    def is_valid(self):
+        return None
+
+
+class NumberValidator(Validator):
+    def __init__(self, obj):
+        super().__init__(obj)
+
+    def is_valid(self):
+        return isinstance(self.obj, (int, float))
+#6
+class Counter:
+    def __init__(self, start=0):
+        self.value = start
+
+    def inc(self, num=1):
+        self.value += num
+
+    def dec(self, num=1):
+        self.value -= num
+        if self.value < 0:
+            self.value = 0
+
+
+class NonDecCounter(Counter):
+    def dec(self, num=1):
+        # Пустой метод, не изменяет значение счетчика
+        pass
+
+
+class LimitedCounter(Counter):
+    def __init__(self, start=0, limit=10):
+        super().__init__(start)
+        self.limit = limit
+
+    def inc(self, num=1):
+        # Увеличиваем значение, не превышая лимит
+        self.value += num
+        if self.value > self.limit:
+            self.value = self.limit

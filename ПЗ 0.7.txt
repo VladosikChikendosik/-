@@ -1,0 +1,254 @@
+#1
+class BasicPlan:
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = False
+    has_UHD = False
+    num_of_devices = 1
+    price = "8.99$"
+
+
+class SilverPlan(BasicPlan):
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = True
+    has_UHD = False
+    num_of_devices = 2
+    price = "12.99$"
+
+
+class GoldPlan(BasicPlan):
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = True
+    has_UHD = True
+    num_of_devices = 4
+    price = "15.99$"
+
+
+#2
+from datetime import date
+
+class WeatherWarning:
+    def __init__(self):
+        pass
+
+    def rain(self):
+        print("Ожидаются сильные дожди и ливни с грозой")
+
+    def snow(self):
+        print("Ожидается снег и усиление ветра")
+
+    def low_temperature(self):
+        print("Ожидается сильное понижение температуры")
+
+
+class WeatherWarningWithDate(WeatherWarning):
+    def __init__(self):
+        super().__init__()
+
+    def rain(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидаются сильные дожди и ливни с грозой")
+
+    def snow(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидается снег и усиление ветра")
+
+    def low_temperature(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидается сильное понижение температуры")
+
+#3
+class Triangle:
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def perimeter(self):
+        return self.a + self.b + self.c
+
+
+class EquilateralTriangle(Triangle):
+    def __init__(self, side):
+        super().__init__(side, side, side)
+#4
+class Counter:
+    def __init__(self, start=0):
+        self.value = start
+
+    def inc(self, n=1):
+        self.value += n
+
+    def dec(self, n=1):
+        self.value = max(0, self.value - n)
+
+class DoubledCounter(Counter):
+    def inc(self, n=1):
+        super().inc(n * 2)
+
+    def dec(self, n=1):
+        super().dec(n * 2)
+....
+Конечно! Вот подробное объяснение работы каждого блока кода:
+
+#1. Классы планов подписки (BasicPlan, SilverPlan, GoldPlan)
+
+```python
+class BasicPlan:
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = False
+    has_UHD = False
+    num_of_devices = 1
+    price = "8.99$"
+```
+- Создается базовый класс `BasicPlan`, который описывает стандартные параметры подписки.
+- Все переменные внутри класса — это атрибуты класса, указывающие возможности подписки:
+  - `can_stream` — возможность смотреть в онлайн.
+  - `can_download` — возможность скачивать контент.
+  - `has_SD`, `has_HD`, `has_UHD` — качество видео.
+  - `num_of_devices` — число устройств, на которые можно установить.
+  - `price` — стоимость подписки.
+
+```python
+class SilverPlan(BasicPlan):
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = True
+    has_UHD = False
+    num_of_devices = 2
+    price = "12.99$"
+```
+- Наследует все свойства `BasicPlan`.
+- Перезаписывает некоторые атрибуты для более расширенного плана:
+  - Теперь можно смотреть и скачивать.
+  - Включено HD качество (`has_HD=True`).
+  - Можно подключить 2 устройства.
+  - Цена повышается.
+
+```python
+class GoldPlan(BasicPlan):
+    can_stream = True
+    can_download = True
+    has_SD = True
+    has_HD = True
+    has_UHD = True
+    num_of_devices = 4
+    price = "15.99$"
+```
+- Еще один уровень подписки.
+- Включает все возможности: SD, HD, UHD.
+- Можно подключить 4 устройства.
+- Самая высокая цена.
+
+---
+
+#2. Классы для предупреждений о погоде (WeatherWarning, WeatherWarningWithDate)
+
+```python
+from datetime import date
+```
+- Импортирует модуль `date`, чтобы работать с датами.
+
+```python
+class WeatherWarning:
+    def __init__(self):
+        pass
+```
+- Базовый класс для предупреждений.
+- Метод `__init__` не делает ничего (можно было оставить пустым или опустить).
+
+```python
+    def rain(self):
+        print("Ожидаются сильные дожди и ливни с грозой")
+    def snow(self):
+        print("Ожидается снег и усиление ветра")
+    def low_temperature(self):
+        print("Ожидается сильное понижение температуры")
+```
+- Методы без параметров, просто выводят сообщение о погодных условиях.
+
+```python
+class WeatherWarningWithDate(WeatherWarning):
+    def __init__(self):
+        super().__init__()
+```
+- Наследует от `WeatherWarning`.
+- В конструкторе вызывает `super().__init__()`, что вызывает конструктор базового класса (хотя он пустой).
+
+```python
+    def rain(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидаются сильные дожди и ливни с грозой")
+    def snow(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидается снег и усиление ветра")
+    def low_temperature(self, warning_date):
+        print(f"{warning_date.strftime('%d.%m.%Y')}\nОжидается сильное понижение температуры")
+```
+- Переопределяют методы, теперь с дополнительным параметром `warning_date`.
+- Используют `strftime` для форматирования даты в строку.
+- Выводят сообщение с датой и погодой.
+
+---
+
+#3. Классы для треугольников (Triangle, EquilateralTriangle)
+
+```python
+class Triangle:
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def perimeter(self):
+        return self.a + self.b + self.c
+```
+- Класс `Triangle` с атрибутами `a`, `b`, `c` (длины сторон).
+- Метод `perimeter()` возвращает сумму длин сторон — периметр треугольника.
+
+```python
+class EquilateralTriangle(Triangle):
+    def __init__(self, side):
+        super().__init__(side, side, side)
+```
+- Наследует от `Triangle`.
+- В конструкторе принимает длину стороны и вызывает конструктор базового класса с одинаковыми сторонами.
+- Обеспечивает создание равностороннего треугольника с одной переменной.
+
+---
+
+#4. Классы счетчиков (Counter, DoubledCounter)
+
+```python
+class Counter:
+    def __init__(self, start=0):
+        self.value = start
+```
+- Инициализация счетчика с начальным значением `start` (по умолчанию 0).
+
+```python
+    def inc(self, n=1):
+        self.value += n
+```
+- Метод увеличения счетчика на `n` (по умолчанию 1).
+
+```python
+    def dec(self, n=1):
+        self.value = max(0, self.value - n)
+```
+- Метод уменьшения на `n`, при этом значение не становится меньше 0.
+
+```python
+class DoubledCounter(Counter):
+    def inc(self, n=1):
+        super().inc(n * 2)
+    def dec(self, n=1):
+        super().dec(n * 2)
+```
+- Наследует от `Counter`.
+- Переопределяет методы `inc` и `dec`, чтобы они увеличивали или уменьшали значение в два раза больше, чем обычно (умножая `n` на 2 при вызове родительских методов).
+
+---

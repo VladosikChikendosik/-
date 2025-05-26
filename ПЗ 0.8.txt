@@ -1,0 +1,148 @@
+#1
+class UpperPrintString(str):
+    def __new__(cls, value):
+        # Создаем новый экземпляр класса str (т.к. наследуем от str)
+        return super().__new__(cls, value)
+
+    def __str__(self):
+        # Для неформального представления возвращаем строку в верхнем регистре
+        return self.upper()
+
+#2
+class LowerString(str):
+    def __new__(cls, obj=''):
+        # Создаем новый экземпляр класса, преобразуя входной объект в строку и переводя в нижний регистр
+        return super().__new__(cls, str(obj).lower())
+
+#3
+# Определяем класс FuzzyString, наследующий от str
+class FuzzyString(str):
+    # Внутренний метод для получения строки в нижнем регистре
+    def _lower(self):
+        return self.lower()
+
+    # Переопределение метода для сравнения ==
+    def __eq__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() == other.lower()
+
+    # Переопределение метода для сравнения !=
+    def __ne__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() != other.lower()
+
+    # Переопределение метода для сравнения >
+    def __gt__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() > other.lower()
+
+    # Переопределение метода для сравнения >=
+    def __ge__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() >= other.lower()
+
+    # Переопределение метода для сравнения <
+    def __lt__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() < other.lower()
+
+    # Переопределение метода для сравнения <=
+    def __le__(self, other):
+        if not isinstance(other, str):
+            return NotImplemented
+        return self._lower() <= other.lower()
+
+    # Переопределение метода для проверки вхождения in
+    def __contains__(self, item):
+        if not isinstance(item, str):
+            return NotImplemented
+        return item.lower() in self._lower()
+
+    # Переопределение метода для проверки не вхождения not in
+    def __notcontains__(self, item):
+        # В Python для операторов not in используется __contains__, поэтому
+        # __notcontains__ не нужен, достаточно переопределить __contains__.
+        # Однако, для корректной работы оператора not in, Python использует __contains__,
+        # и оператор not in возвращает отрицание этого метода.
+        # Поэтому ничего дополнительно писать не нужно.
+        pass
+
+    # Для поддержки оператора 'not in' автоматически используют __contains__,
+    # поэтому достаточно переопределить __contains__.
+
+# Обратите внимание: оператор 'in' вызывает __contains__, а 'not in' — его отрицание.
+# Поэтому переопределение __contains__ достаточно для обеих операций.
+
+#4
+class TitledText(str):
+    def __new__(cls, content, text_title):
+        # новый экземпляр класса str с содержимым content
+        instance = super().__new__(cls, content)
+        # сохраняем заголовок как атрибут
+        instance._title = text_title
+        return instance
+
+    def title(self):
+        return self._title
+#5
+class SuperInt(int):
+    def __new__(cls, value=0):
+        # Создаем новый экземпляр, как целое число
+        return super().__new__(cls, value)
+
+    def repeat(self, n=2):
+        # Повторить строковое представление числа n раз и вернуть как SuperInt
+        repeated_str = str(self) * n
+        return SuperInt(int(repeated_str))
+
+    def to_bin(self):
+        # Получить двоичное представление числа
+        if self < 0:
+            return str(bin(self)[3:])  # убираем '-0b'
+        else:
+            return bin(self)[2:]  # убираем '0b'
+
+    def next(self):
+        # Следующее число
+        return SuperInt(int(self) + 1)
+
+    def prev(self):
+        # Предыдущее число
+        return SuperInt(int(self) - 1)
+
+    def __iter__(self):
+        # Итерация по цифрам числа слева направо
+        for ch in str(self):
+            # Если число отрицательное, пропускаем знак минуса
+            if ch == '-':
+                continue
+            yield SuperInt(int(ch))
+#6
+class RoundedInt(int):
+    def __new__(cls, num, even=True):
+        # Определяем округление в зависимости от even
+        if even:
+            # Округление до ближайшего чётного числа
+            rounded_num = int(round(num))
+            if rounded_num % 2 != 0:
+                # Если результат нечетный, корректируем
+                if num - rounded_num > 0:
+                    rounded_num += 1
+                else:
+                    rounded_num -= 1
+        else:
+            # Округление до ближайшего нечетного числа
+            rounded_num = int(round(num))
+            if rounded_num % 2 == 0:
+                # Если результат четный, корректируем
+                if num - rounded_num > 0:
+                    rounded_num += 1
+                else:
+                    rounded_num -= 1
+        # Создаем экземпляр как наследник int
+        return super().__new__(cls, rounded_num)

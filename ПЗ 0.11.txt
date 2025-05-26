@@ -1,0 +1,204 @@
+#1
+class USADate:
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def format(self):
+        # Формат MM-DD-YYYY
+        return f"{self.month:02d}-{self.day:02d}-{self.year}"
+
+    def iso_format(self):
+        # Формат YYYY-MM-DD
+        return f"{self.year}-{self.month:02d}-{self.day:02d}"
+
+
+class ItalianDate:
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def format(self):
+        # Формат DD/MM/YYYY
+        return f"{self.day:02d}/{self.month:02d}/{self.year}"
+
+    def iso_format(self):
+        # Формат YYYY-MM-DD
+        return f"{self.year}-{self.month:02d}-{self.day:02d}"
+Последовательность работы внутри кода по шагам:
+
+1. Создание экземпляра класса `USADate`:
+   - Вызов метода `__init__` с передачей параметров `year`, `month`, `day`.
+   - Инициализация атрибутов `self.year`, `self.month`, `self.day`.
+
+2. Вызов метода `format()` у экземпляра `USADate`:
+   - Форматирует дату как `MM-DD-YYYY`.
+   - Используются форматные строки с заполнением нулями до двух знаков для месяца и дня.
+   - Возвращает строку с датой в формате `MM-DD-YYYY`.
+
+3. Вызов метода `iso_format()` у экземпляра `USADate`:
+   - Форматирует дату как `YYYY-MM-DD`.
+   - Используются форматные строки с заполнением нулями для месяца и дня.
+   - Возвращает строку с датой в формате `YYYY-MM-DD`.
+
+4. Создание экземпляра класса `ItalianDate`:
+   - Вызов метода `__init__` с передачей параметров `year`, `month`, `day`.
+   - Инициализация атрибутов `self.year`, `self.month`, `self.day`.
+
+5. Вызов метода `format()` у экземпляра `ItalianDate`:
+   - Форматирует дату как `DD/MM/YYYY`.
+   - Используются форматные строки с заполнением нулями для дня и месяца.
+   - Возвращает строку с датой в формате `DD/MM/YYYY`.
+
+6. Вызов метода `iso_format()` у экземпляра `ItalianDate`:
+   - Форматирует дату как `YYYY-MM-DD`.
+   - Используются форматные строки с заполнением нулями для месяца и дня.
+   - Возвращает строку с датой в формате `YYYY-MM-DD`.
+
+Это последовательность вызовов и работы методов внутри этих классов при создании и форматировании дат.
+#2
+class MinStat:
+    def __init__(self, iterable=None):
+        # Инициализация класса. Если передан итерируемый объект, создаем из него список чисел.
+        # Иначе — создаем пустой список.
+        self.numbers = list(iterable) if iterable is not None else []
+
+    def add(self, num):
+        # Добавляем число num в список numbers
+        self.numbers.append(num)
+
+    def result(self):
+        # Возвращаем минимальное число из списка.
+        # Если список пуст, возвращаем None.
+        if not self.numbers:
+            return None
+        return min(self.numbers)
+
+    def clear(self):
+        # Очищаем список numbers
+        self.numbers.clear()
+
+
+class MaxStat:
+    def __init__(self, iterable=None):
+        # Инициализация класса. Если передан итерируемый объект, создаем из него список чисел.
+        # Иначе — создаем пустой список.
+        self.numbers = list(iterable) if iterable is not None else []
+
+    def add(self, num):
+        # Добавляем число num в список numbers
+        self.numbers.append(num)
+
+    def result(self):
+        # Возвращаем максимальное число из списка.
+        # Если список пуст, возвращаем None.
+        if not self.numbers:
+            return None
+        return max(self.numbers)
+
+    def clear(self):
+        # Очищаем список numbers
+        self.numbers.clear()
+
+
+class AverageStat:
+    def __init__(self, iterable=None):
+        # Инициализация класса. Если передан итерируемый объект, создаем из него список чисел.
+        # Иначе — создаем пустой список.
+        if iterable is not None:
+            self.numbers = list(iterable)
+        else:
+            self.numbers = []
+
+    def add(self, num):
+        # Добавляем число num в список numbers
+        self.numbers.append(num)
+
+    def result(self):
+        # Вычисляем среднее арифметическое всех чисел в списке.
+        # Если список пуст, возвращаем None.
+        if not self.numbers:
+            return None
+        return sum(self.numbers) / len(self.numbers)
+#3
+class LeftParagraph:
+    def __init__(self, length):
+        self.length = length
+        self.current_line = ""
+
+    def add(self, text):
+        words = text.split()
+        for word in words:
+            # Проверяем, поместится ли слово в текущую строку
+            if not self.current_line:
+                # Если строка пустая, добавляем слово без пробела
+                if len(word) <= self.length:
+                    self.current_line = word
+                else:
+                    # В случае, если слово длиннее строки (гарантируется корректность)
+                    self.current_line = word
+            else:
+                # Если не помещается с добавлением пробела
+                if len(self.current_line) + 1 + len(word) <= self.length:
+                    self.current_line += ' ' + word
+                else:
+                    # Выводим текущую строку и начинаем новую
+                    print(self.current_line)
+                    self.current_line = word
+        # После добавления всех слов, ничего не выводим, пока не вызван end()
+
+    def end(self):
+        # Выводим текущую строку, если она не пустая
+        if self.current_line:
+            print(self.current_line)
+        self.current_line = ""
+
+
+class RightParagraph:
+    def __init__(self, length):
+        self.length = length
+        self.current_line = ""
+
+    def add(self, text):
+        words = text.split()
+        for word in words:
+            # Проверяем, поместится ли слово в текущую строку
+            if not self.current_line:
+                # Если строка пустая, добавляем слово без пробела
+                if len(word) <= self.length:
+                    self.current_line = word
+                else:
+                    # В случае, если слово длиннее строки (гарантируется корректность)
+                    self.current_line = word
+            else:
+                # Если не помещается с добавлением пробела
+                if len(self.current_line) + 1 + len(word) <= self.length:
+                    self.current_line += ' ' + word
+                else:
+                    # Выводим текущую строку и начинаем новую
+                    print(self.current_line.rjust(self.length))
+                    self.current_line = word
+
+    def end(self):
+        # Выводим текущую строку, выравненную по правому краю
+        if self.current_line:
+            print(self.current_line.rjust(self.length))
+        self.current_line = ""
+# Для левого выравнивания
+leftparagraph = LeftParagraph(10)
+leftparagraph.add('death')
+leftparagraph.add('can have me')
+leftparagraph.add('when it earns me')
+leftparagraph.end()
+
+# Для правого выравнивания
+rightparagraph = RightParagraph(10)
+rightparagraph.add('death')
+rightparagraph.add('can have me')
+rightparagraph.add('when it earns me')
+rightparagraph.end()
+
+    
+
